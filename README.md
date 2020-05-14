@@ -2,10 +2,15 @@
 解决 kubeadm config images pull 中国无法访问问题
 
 在Ubantu或者Debain安装kubeadm 之后，需要运行kubeadm init 初始化kubeadm环境 ，但是会发现，kubeadm init 失败的情况.
+
 查看错误信息，发现时国内对k8s.gcr.io 的访问有限制.
+
 但是在失败信息中发现“You can also perform this action in beforehand using 'kubeadm config images pull'”.
+
 可以提前将需要的images pull下来.
+
 深入研究kubeadm config 发现并没有更换源的方式，却提供了kubeadm config images list指令，执行之后效果是这样:
+
 ```sh
 W0514 11:24:58.943805    8634 configset.go:202] WARNING: kubeadm cannot validate component configs for API groups [kubelet.config.k8s.io kubeproxy.config.k8s.io]
 k8s.gcr.io/kube-apiserver:v1.18.2
@@ -18,9 +23,13 @@ k8s.gcr.io/coredns:1.6.7
 ```
 
 经过研究，发现阿里云的源包含这些镜像 registry.cn-hangzhou.aliyuncs.com/google_containers/
+
 docker 的image是可以通过tag 指令“调包”的
-结合这些指令，生成一个方便的脚本解决这个问题。
-查看 image 
+
+结合这些指令，生成一个方便的脚本解决这个问题.
+
+查看 images
+
 ```sh
 root@leo-debian:~# docker images
 REPOSITORY                           TAG                 IMAGE ID            CREATED             SIZE
@@ -32,8 +41,7 @@ k8s.gcr.io/pause                     3.2                 80d28bedfe5d        2 m
 k8s.gcr.io/coredns                   1.6.7               67da37a9a360        3 months ago        43.8MB
 k8s.gcr.io/etcd                      3.4.3-0             303ce5db0e90        6 months ago        288MB
 ```
-全有了
-执行kubeadm init 
+全有了,执行kubeadm init 
 ```sh
 root@leo-debain:~# kubeadm init
 W0514 11:47:43.280111   10292 configset.go:202] WARNING: kubeadm cannot validate component configs for API groups [kubelet.config.k8s.io kubeproxy.config.k8s.io]
