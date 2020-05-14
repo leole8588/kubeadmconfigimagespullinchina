@@ -26,7 +26,7 @@ k8s.gcr.io/coredns:1.6.7
 
 docker 的image是可以通过tag 指令“调包”的
 
-结合这些指令，生成一个方便的脚本解决这个问题.
+结合这些指令，写一个方便的脚本[kubeadm_config_images_pull_in_china.sh](https://github.com/leole8588/kubeadmconfigimagespullinchina/blob/master/kubeadm_config_images_pull_in_china.sh)解决这个问题.
 
 查看 images
 
